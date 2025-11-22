@@ -1,0 +1,211 @@
+:root {
+  --bg-main: #323232;
+  --bg-card: #10141b;
+  --bg-card-soft: #151a23;
+  --accent: #00e0b8;
+  --accent-soft: #0f766e;
+  --accent-yellow: #f59e0b;
+  --text-main: #f9fafb;
+  --text-muted: #9ca3af;
+  --border-soft: #1f2933;
+}
+
+body {
+  width : 100%;
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+.app-shell {
+  width: 100%;
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 107px;
+  background: #212121;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.sidebar-logo {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--accent);
+  text-align: center;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sidebar-link {
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.sidebar-link.active {
+  background: var(--accent-soft);
+  color: white;
+}
+
+.User {
+  padding : 10px;
+  background : #323232;
+  border-radius: 10px;
+}
+.main {
+  width: max-content;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  background: linear-gradient(to bottom right, #141414, #1f1f1f, #0D7377);
+  min-height: 100vh;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.topbar {
+  width : 100%;
+  height: 56px;
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1 0px;
+  background: #212121;
+}
+
+.content {
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.page-title {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.card-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid var(--border-soft);
+}
+
+.card-metric {
+  min-width: 160px;
+}
+
+.card-metric-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.card-metric-value {
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.card-metric-tag {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.button-primary {
+  background: var(--accent);
+  border: none;
+  color: #020617;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button-primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.input,
+.select {
+  background: #020617;
+  color: var(--text-main);
+  border-radius: 8px;
+  border: 1px solid #1f2933;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.form-row label {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.list {
+  margin-top: 16px;
+  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+}
+
+.list-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-top: 1px solid #111827;
+  font-size: 14px;
+}
+
+.list-row:nth-child(1) {
+  border-top: none;
+}
+
+.badge {
+  display: inline-flex;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #111827;
+  font-size: 11px;
+  color: var(--text-muted);
+}

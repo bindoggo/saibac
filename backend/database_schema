@@ -1,0 +1,128 @@
+-- Create DB
+CREATE DATABASe college;
+USE college;
+
+-- Departments
+CREATE TABLE departments (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  code VARCHAR(16) NOT NULL UNIQUE,
+  name VARCHAR(128) NOT NULL
+);
+
+-- Rooms
+CREATE TABLE rooms (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  code VARCHAR(32) NOT NULL UNIQUE,
+  capacity INT NOT NULL,
+  type ENUM('theory','lab') NOT NULL,
+  location VARCHAR(128)
+);
+
+-- Faculty
+CREATE TABLE faculty (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  email VARCHAR(150) UNIQUE,
+  department_id INT,
+  max_classes_per_day INT DEFAULT 4,
+  subjects_can_teach JSON, -- e.g. ["CSE101","CSE102"]
+  active TINYINT(1) DEFAULT 1,
+  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE SET NULL
+);
+
+-- Batches
+CREATE TABLE batches (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(80) NOT NULL,       -- e.g. "CSE-2023-Batch-A"
+  department_id INT,
+  semester INT NOT NULL,
+  shift ENUM('day','evening') DEFAULT 'day',
+  size INT NOT NULL,
+  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE SET NULL
+);
+
+-- Subjects (canonical)
+CREATE TABLE subjects (
+  code VARCHAR(32) PRIMARY KEY,    -- e.g. "CSE101"
+  title VARCHAR(200) NOT NULL,
+  department_id INT,
+  type ENUM('theory','lab') NOT NULL,
+  classes_per_week INT NOT NULL DEFAULT 3,
+  duration_slots INT NOT NULL DEFAULT 1, -- number of contiguous timeslots per class
+  FOREIGN KEY (department_id) REFERENCES departments(id) ON DELETE SET NULL
+);
+
+-- Offerings (which subject is offered to which batch in a semester)
+CREATE TABLE subject_offerings (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  subject_code VARCHAR(32) NOT NULL,
+  batch_id INT NOT NULL,
+  semester INT NOT NULL,
+  elective TINYINT(1) DEFAULT 0,
+  FOREIGN KEY (subject_code) REFERENCES subjects(code) ON DELETE CASCADE,
+  FOREIGN KEY (batch_id) REFERENCES batches(id) ON DELETE CASCADE
+);
+
+-- Faculty assignments: which faculty will teach which offering
+CREATE TABLE faculty_assignments (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  subject_offering_id INT NOT NULL,
+  faculty_id INT NOT NULL,
+  preference_score DECIMAL(4,2) DEFAULT NULL, -- higher is better
+  FOREIGN KEY (subject_offering_id) REFERENCES subject_offerings(id) ON DELETE CASCADE,
+  FOREIGN KEY (faculty_id) REFERENCES faculty(id) ON DELETE CASCADE
+);
+
+-- Timeslots: day 0..6, slot 1..n (slot length implied by start/end)
+CREATE TABLE timeslots (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  day TINYINT NOT NULL,   -- 0 = Sunday ... 6 = Saturday (or adapt)
+  slot TINYINT NOT NULL,  -- 1..slots_per_day
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
+  UNIQUE KEY (day, slot)
+);
+
+-- Faculty unavailability (can use date for specific date or day+slot for recurring weekly unavailability)
+CREATE TABLE faculty_unavailability (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  faculty_id INT NOT NULL,
+  date DATE DEFAULT NULL,        -- specific date (one-off)
+  day TINYINT DEFAULT NULL,      -- weekly recurring day 0..6
+  slot TINYINT DEFAULT NULL,     -- weekly recurring slot number
+  reason VARCHAR(200),
+  FOREIGN KEY (faculty_id) REFERENCES faculty(id) ON DELETE CASCADE,
+  CHECK ( (date IS NOT NULL) OR (day IS NOT NULL) OR (slot IS NULL) )
+);
+
+-- Fixed slots (pre-booked classes that must appear at given day/slot)
+CREATE TABLE fixed_slots (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  subject_offering_id INT NOT NULL,
+  day TINYINT NOT NULL,
+  slot TINYINT NOT NULL,
+  room_id INT DEFAULT NULL,
+  reason VARCHAR(200),
+  FOREIGN KEY (subject_offering_id) REFERENCES subject_offerings(id) ON DELETE CASCADE,
+  FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE SET NULL,
+  UNIQUE KEY (subject_offering_id, day, slot)
+);
+
+-- Config table for system settings
+CREATE TABLE config (
+  `key` VARCHAR(100) PRIMARY KEY,
+  `value` TEXT
+);
+
+-- Useful indexes
+CREATE INDEX idx_faculty_dept ON faculty(department_id);
+CREATE INDEX idx_batches_dept ON batches(department_id);
+CREATE INDEX idx_offerings_batch ON subject_offerings(batch_id);
+CREATE INDEX idx_timeslot_day_slot ON timeslots(day, slot);
+
+
+INSERT INTO rooms (code, capacity, type, location) VALUES
+    -> ('R101', 60, 'theory', 'Main Building, Floor 1'),
+    -> ('LB201', 30, 'lab', 'Lab Block A, Floor 2'),
+    -> ('R102', 40, 'theory', 'Main Building, Floor 1'),
+    -> ('LB202', 24, 'lab', 'Lab Block B');

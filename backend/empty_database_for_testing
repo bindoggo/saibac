@@ -1,0 +1,17 @@
+USE college;
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+TRUNCATE TABLE faculty_unavailability;
+TRUNCATE TABLE fixed_slots;
+TRUNCATE TABLE faculty_assignments;
+TRUNCATE TABLE subject_offerings;
+TRUNCATE TABLE subjects;
+TRUNCATE TABLE batches;
+TRUNCATE TABLE faculty;
+TRUNCATE TABLE rooms;
+TRUNCATE TABLE departments;
+TRUNCATE TABLE timeslots;
+TRUNCATE TABLE config;
+
+SET FOREIGN_KEY_CHECKS = 1;
