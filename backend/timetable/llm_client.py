@@ -8,7 +8,7 @@ import requests # pyright: ignore[reportMissingModuleSource]
 
 logger = logging.getLogger(__name__)
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "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")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_API_URL = os.getenv("OPENAI_API_URL", "https://api.openai.com/v1/chat/completions")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")  # change if you want another model
 DEFAULT_TIMEOUT = 30
