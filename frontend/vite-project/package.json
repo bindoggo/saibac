@@ -1,8 +1,20 @@
 {
   "name": "vite-project",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
+  "description": "frontend for classroom scheduler",
+  "homepage": "https://github.com/bindoggo/saibac#readme",
+  "bugs": {
+    "url": "https://github.com/bindoggo/saibac/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bindoggo/saibac.git"
+  },
+  "license": "ISC",
+  "author": "VIBECODERS",
   "type": "module",
+  "main": "eslint.config.js",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -13,7 +25,7 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.9.6",
-    "lucide-react" : "^0.554.0"
+    "lucide-react": "^0.554.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
