@@ -1,7 +1,7 @@
 // src/pages/Faculty.jsx
 import { useEffect, useState } from "react";
 
-const API = process.env.REACT_APP_API_BASE_URL || "http://localhost:8000/api";
+const API = "https://saibac.onrender.com/api";
 
 export default function FacultyPage() {
   const [stats, setStats] = useState({ total: 0, active: 0, on_leave: 0, avg_hours: 0 });

@@ -1,7 +1,6 @@
 // src/pages/Departments.jsx
 import { useEffect, useState } from "react";
-const API = process.env.REACT_APP_API_BASE_URL || "http://localhost:8000/api";
-
+const API = "https://saibac.onrender.com/api";
 export default function DepartmentsPage() {
   const [departments, setDepartments] = useState([]);
   const [code, setCode] = useState("");
