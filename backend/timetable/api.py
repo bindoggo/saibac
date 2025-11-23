@@ -1,9 +1,9 @@
 # backend/api.py
 from typing import List, Optional
-from datetime import datetime
+from datetime import datetime, time
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 from sqlalchemy.orm import Session
 
@@ -85,12 +85,42 @@ class FacultyAssignmentCreate(BaseModel):
     subject_offering_id: int
     faculty_id: int
 
-
 class TimeslotCreate(BaseModel):
     day: int        # 0=Mon
     slot: int       # 1,2,3...
-    start_time: Optional[str] = None  # "09:00"
-    end_time: Optional[str] = None    # "10:00"
+    # NOTE: type is Optional[time], not Optional[str]
+    start_time: Optional[time] = None  # accepts "09:00", "9", 9, "9:00", etc.
+    end_time:   Optional[time] = None
+
+    @validator("start_time", "end_time", pre=True)
+    def normalize_time(cls, value):
+        if value is None:
+            return None
+
+        # if it's already a time object, accept it
+        if isinstance(value, time):
+            return value
+
+        # if it's a number like 9 or "9"
+        try:
+            if isinstance(value, int):
+                return time(value, 0)
+            if isinstance(value, str) and value.isdigit():
+                return time(int(value), 0)
+        except Exception:
+            pass
+
+        # if it's a string with colon "HH:MM"
+        if isinstance(value, str):
+            try:
+                # time.fromisoformat accepts "HH:MM" or "HH:MM:SS"
+                return time.fromisoformat(value)
+            except Exception:
+                raise ValueError(f"Invalid time format: {value!r}. Accepts '9', '09', '9:00', '09:00', or integer hour.")
+
+        # anything else is invalid
+        raise ValueError(f"Invalid time type: {type(value)}")
+
 
 
 class SolveRequest(BaseModel):
