@@ -10,6 +10,8 @@ origins = [
     "http://127.0.0.1:5173",
     "http://localhost:3000",   # optional if you ever use CRA
     "http://127.0.0.1:3000",
+    "https://saibac.onrender.com"
+
 ]
 
 app.add_middleware(
