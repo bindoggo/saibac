@@ -36,39 +36,9 @@ from .models import (
     FacultyAssignments,
     Timeslots,
     # if you already have these, you can remove their definitions below
-    # TimetableVersion,
-    # TimetableEntry,
+    TimetableVersion,
+    TimetableEntry,
 )
-
-# ==========================
-# 1) New tables (if not exist)
-# ==========================
-
-class TimetableVersion(Base):
-    __tablename__ = "timetable_versions"
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    name: Mapped[str] = mapped_column(String(255))
-    status: Mapped[str] = mapped_column(String(50), default="draft")  # 'draft' | 'approved'
-    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-
-
-class TimetableEntry(Base):
-    __tablename__ = "timetable_entries"
-
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    version_id: Mapped[str] = mapped_column(ForeignKey("timetable_versions.id"))
-    subject_offering_id: Mapped[str] = mapped_column(String(36))
-    faculty_id: Mapped[str] = mapped_column(String(36))
-    batch_id: Mapped[str] = mapped_column(String(36))
-    room_id: Mapped[str] = mapped_column(String(36))
-    day: Mapped[int] = mapped_column(Integer)   # e.g., 0=Mon,1=Tue...
-    slot: Mapped[int] = mapped_column(Integer)  # timeslot number in the day
-
-
-# Create the two tables if they don't exist yet
-Base.metadata.create_all(bind=engine, tables=[TimetableVersion.__table__, TimetableEntry.__table__])
-
 
 # ==========================
 # 2) Helper functions

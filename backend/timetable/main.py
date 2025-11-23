@@ -1,11 +1,7 @@
 # backend/main.py
 from fastapi import FastAPI # pyright: ignore[reportMissingImports]
 from fastapi.middleware.cors import CORSMiddleware # pyright: ignore[reportMissingImports]
-from .db_init import init_database
 from .api import router as api_router
-
-# Initialize DB on startup
-init_database()
 
 app = FastAPI(title="Smart Timetable API")
 
