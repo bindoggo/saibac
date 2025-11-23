@@ -1,8 +1,7 @@
 // src/pages/Faculty.jsx
 import { useEffect, useState } from "react";
 
-const API = "http://localhost:8000/api";
-
+const API = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
 export default function FacultyPage() {
   const [stats, setStats] = useState({ total: 0, active: 0, on_leave: 0, avg_hours: 0 });
   const [faculty, setFaculty] = useState([]);
